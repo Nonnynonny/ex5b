@@ -15,7 +15,7 @@
 		<hr>
 		<form role="form" method="GET">
 		  <div class="form-group">
-			<label for="tem">Current temperature:</label>
+			<label for="tem">Current temperature (Celsius):</label>
 			<input type="text" class="form-control" name="temp" id="temp" value="20">
 		  </div><br>
 		  <div class="form-group">
@@ -34,11 +34,8 @@
 	
 	<script>
 	    $(document).ready(function(){
-			$("button").click(function(){
-			   var t = $('#temp').val();//celsius
-			   var u = $('#unit').val();
-			   
-			   if(isNaN(t)){
+				function validate(t){
+				if(isNaN(t)){
 					msg = "Please verify whether the temperature value is correct!!!";
 					alert(msg);
 					return;
@@ -48,11 +45,13 @@
 					alert(msg);
 					return;
 			   }
+			}
+
+				function temConversion(t,u){
+				var t1;
+			   	var u1;
 			   
-			   var t1;
-			   var u1;
-			   
-			   if(u == "F"){
+			   	if(u == "F"){
 					t1 = t * (9/5) + 32;
 					u1 = "Fahrenheit";
 			   }else if(u == "K"){
@@ -62,8 +61,18 @@
 					t1 = t * (4/5);
 					u1 = "Kelvin";
 			   }
+			   return {t1,u1};
+			}
+			$("button").click(function(){
+			   var t = $('#temp').val();//celsius
+			   var u = $('#unit').val();
 			   
-			   alert("Temperature is "+t1+" in "+u1);
+			   var chk = validate(t);
+			   if(chk != null)return chk;
+			   
+			   var tc = temConversion(t,u);
+			   
+			   document.getElementById("result").innerHTML = "Temperature is "+tc.t1+" in "+tc.u1;
 			});
 		});
 	</script>
